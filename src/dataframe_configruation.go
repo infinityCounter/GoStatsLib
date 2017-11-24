@@ -11,17 +11,17 @@ const (
 )
 
 type DataFrameConfiguration struct {
-	headingStyle             headingsOption
-	fromCSV                  bool
-	filePath                 string
-	rowHeadings, colHeadings []fmt.Stringer
+	headingStyle           headingsOption
+	fromCSV                bool
+	filePath               string
+	rowLabels, colHeadings []fmt.Stringer
 }
 
 func NewDFConfig() DataFrameConfiguration {
 	return DataFrameConfiguration{
 		headingStyle: useNoHeadings,
 		fromCSV:      false,
-		rowHeadings:  []fmt.Stringer{},
+		rowLabels:    []fmt.Stringer{},
 		colHeadings:  []fmt.Stringer{},
 	}
 }
@@ -55,8 +55,8 @@ func (dfc *DataFrameConfiguration) FromCSV() bool {
 	return dfc.fromCSV
 }
 
-func (dfc *DataFrameConfiguration) SetRowHeadings(headings []fmt.Stringer) {
-	dfc.rowHeadings = headings
+func (dfc *DataFrameConfiguration) SetRowLabels(headings []fmt.Stringer) {
+	dfc.rowLabels = headings
 	if dfc.headingStyle != useFirstAsHeadings {
 		dfc.UseHeadingArgs()
 	}
@@ -71,13 +71,13 @@ func (dfc *DataFrameConfiguration) SetColHeadings(headings []fmt.Stringer) {
 
 func (dfc *DataFrameConfiguration) SetHeadings(col, row []fmt.Stringer) {
 	dfc.SetColHeadings(col)
-	dfc.SetRowHeadings(row)
+	dfc.SetRowLabels(row)
 }
 
 func (dfc DataFrameConfiguration) GetColHeadings() []fmt.Stringer {
 	return dfc.colHeadings
 }
 
-func (dfc DataFrameConfiguration) GetRowHeadings() []fmt.Stringer {
-	return dfc.rowHeadings
+func (dfc DataFrameConfiguration) GetRowLabels() []fmt.Stringer {
+	return dfc.rowLabels
 }

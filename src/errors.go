@@ -19,18 +19,23 @@ func (de dataerr) Error() string {
 }
 
 var (
-	IndexOutOfBoundsError = dataerr{
+	IndexOutOfBounds = dataerr{
 		code:    0,
 		message: "Index specified is out of bounds, cannot acces data structure element at position",
 	}
 
-	IndexOrderInvalidError = dataerr{
+	IndexOrderInvalid = dataerr{
 		code:    1,
 		message: "Start index greater than end index, cannot access elements at data structure position",
 	}
 
-	DataFrameDuplicateHeadingError = dataerr{
+	DataFrameDuplicateHeading = dataerr{
 		code:    2,
 		message: "DataFrame cannot contain duplicate column/row heading",
+	}
+
+	DataFrameInsufficientLookupArguments = dataerr{
+		code:    3,
+		message: "DataFrame cannot lookup value with unspecified column or row",
 	}
 )

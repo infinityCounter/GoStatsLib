@@ -62,14 +62,14 @@ func (mtrx *Matrix) AddCol(numCols int) {
 
 func (mtrx Matrix) GetCol(pos int) ([]float64, DataError) {
 	if pos < 0 || pos >= mtrx.colCount {
-		return []float64{}, IndexOutOfBoundsError
+		return []float64{}, IndexOutOfBounds
 	}
 	return mtrx.Data[pos], nil
 }
 
 func (mtrx Matrix) GetRow(pos int) ([]float64, DataError) {
 	if pos < 0 || pos >= mtrx.rowCount {
-		return []float64{}, IndexOutOfBoundsError
+		return []float64{}, IndexOutOfBounds
 	}
 	var row []float64
 	for _, col := range mtrx.Data {
@@ -80,14 +80,14 @@ func (mtrx Matrix) GetRow(pos int) ([]float64, DataError) {
 
 func (mtrx Matrix) GetPosValue(col, row int) (float64, DataError) {
 	if (col < 0 || row < 0) || (col >= mtrx.colCount || row >= mtrx.rowCount) {
-		return 0, IndexOutOfBoundsError
+		return 0, IndexOutOfBounds
 	}
 	return mtrx.Data[col][row], nil
 }
 
 func (mtrx *Matrix) SetRow(rowIndex int, vals []float64) DataError {
 	if rowIndex < 0 || rowIndex >= mtrx.rowCount {
-		return IndexOutOfBoundsError
+		return IndexOutOfBounds
 	}
 	lenDiff := len(vals) - mtrx.ColCount()
 	if lenDiff < 0 {
@@ -104,7 +104,7 @@ func (mtrx *Matrix) SetRow(rowIndex int, vals []float64) DataError {
 
 func (mtrx *Matrix) SetPosValue(col, row int, value float64) DataError {
 	if (col < 0 || row < 0) || (col >= mtrx.colCount || row >= mtrx.rowCount) {
-		return IndexOutOfBoundsError
+		return IndexOutOfBounds
 	}
 	mtrx.Data[col][row] = value
 	return nil
@@ -114,10 +114,10 @@ func (mtrx *Matrix) SetPosValue(col, row int, value float64) DataError {
 func (mtrx Matrix) GetSubMatrix(fromCol, toCol, fromRow, toRow int) (*Matrix, DataError) {
 	if (fromCol < 0 || toCol < 0 || fromRow < 0 || toRow < 0) ||
 		(fromCol >= mtrx.colCount || toCol >= mtrx.colCount || fromRow >= mtrx.rowCount || toRow >= mtrx.rowCount) {
-		return nil, IndexOutOfBoundsError
+		return nil, IndexOutOfBounds
 	}
 	if fromCol > toCol || fromRow > toRow {
-		return nil, IndexOrderInvalidError
+		return nil, IndexOrderInvalid
 	}
 	data := mtrx.Data[fromCol : toCol+1]
 	for _, col := range data {
