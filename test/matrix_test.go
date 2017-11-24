@@ -140,3 +140,30 @@ func TestDivideAllByFloat(t *testing.T) {
 		}
 	}
 }
+
+func TestNormalizeMatrix(t *testing.T) {
+	colSize := 4
+	rowSize := 2
+	vals := [][]float64{
+		{5, 6},
+		{9.1, 3.3},
+		{1.1, 2.4},
+		{9.1, 0},
+	}
+	mtrx := src.NewMatrix(colSize, rowSize)
+	for ccount := 0; ccount < colSize; ccount++ {
+		for rcount := 0; rcount < rowSize; rcount++ {
+			mtrx.SetPosValue(ccount, rcount, vals[ccount][rcount])
+		}
+	}
+	mtrx.NormalizeMatrix()
+	for cidx, col := range mtrx.Data {
+		for ridx, cell := range col {
+			normalized := (vals[cidx][ridx] / vals[cidx][0])
+			if cell != normalized {
+				t.Errorf("Matrix divide by all failed, expected:%f, actual:%f", normalized, cell)
+				break
+			}
+		}
+	}
+}
