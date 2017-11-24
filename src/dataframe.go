@@ -167,3 +167,12 @@ func (df DataFrame) GetValue(dfl DataFrameLookup) (float64, DataError) {
 	rIdx := df.GetRowLabelIndex(dfl.GetRowLookup())
 	return df.Matrix.GetPosValue(cIdx, rIdx)
 }
+
+func (df DataFrame) SetValue(dfl DataFrameLookup, val float64) DataError {
+	if dfl.Col == nil || dfl.Row == nil {
+		return DataFrameInsufficientLookupArguments
+	}
+	cIdx := df.GetColHeadingIndex(dfl.GetColLookup())
+	rIdx := df.GetRowLabelIndex(dfl.GetRowLookup())
+	return df.Matrix.SetPosValue(cIdx, rIdx, val)
+}
