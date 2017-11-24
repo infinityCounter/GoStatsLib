@@ -167,3 +167,33 @@ func TestNormalizeMatrix(t *testing.T) {
 		}
 	}
 }
+
+func TestGetCol(t *testing.T) {
+	colSize := 4
+	rowSize := 2
+	vals := [][]float64{
+		{5, 6},
+		{9.1, 3.3},
+		{1.1, 2.4},
+		{9.1, 0},
+	}
+	mtrx := src.NewMatrix(colSize, rowSize)
+	for ccount := 0; ccount < colSize; ccount++ {
+		for rcount := 0; rcount < rowSize; rcount++ {
+			mtrx.SetPosValue(ccount, rcount, vals[ccount][rcount])
+		}
+	}
+	col, err := mtrx.GetCol(0)
+	if err != nil {
+		t.Errorf("Matrix did not return column")
+	}
+	if len(col) != len(vals[0]) {
+		t.Errorf("Matrix column returned does not match, expected:%v, actual:%v", vals[0], col)
+	}
+	for idx, val := range vals[0] {
+		if val != col[idx] {
+			t.Errorf("Matrix column returned does not match, expected:%v, actual:%v", vals[0], col)
+			break
+		}
+	}
+}
