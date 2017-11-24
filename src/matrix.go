@@ -40,8 +40,8 @@ func (mtrx *Matrix) AddRow(numRows int) {
 	} else if numRows == 0 {
 		return
 	}
-	for _, col := range mtrx.Data {
-		col = append(col, make([]float64, numRows)...)
+	for idx, col := range mtrx.Data {
+		mtrx.Data[idx] = append(col, make([]float64, numRows)...)
 	}
 	mtrx.rowCount = mtrx.rowCount + numRows
 }
@@ -129,9 +129,9 @@ func (mtrx Matrix) GetSubMatrix(fromCol, toCol, fromRow, toRow int) (*Matrix, Da
 }
 
 func (mtrx *Matrix) DivideAllByFloat64(val float64) {
-	for _, col := range mtrx.Data {
-		for _, cell := range col {
-			cell = cell / val
+	for cidx, col := range mtrx.Data {
+		for ridx, cell := range col {
+			mtrx.Data[cidx][ridx] = cell / val
 		}
 	}
 }

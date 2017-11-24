@@ -85,7 +85,7 @@ func (df DataFrame) ValidateColHeaders() bool {
 	return true
 }
 
-func (df DataFrame) ValidateRowHeaders() bool {
+func (df DataFrame) ValidateRowLabels() bool {
 	for idx, heading := range df.RowLabels {
 		for idx2, h2 := range df.RowLabels {
 			if idx == idx2 {
@@ -100,7 +100,7 @@ func (df DataFrame) ValidateRowHeaders() bool {
 }
 
 func (df DataFrame) ValidateHeadings() bool {
-	return df.ValidateColHeaders() && df.ValidateRowHeaders()
+	return df.ValidateColHeaders() && df.ValidateRowLabels()
 }
 
 func (df *DataFrame) loadFromCSV(filePath string, useFirstAsHeadings bool) {
@@ -175,4 +175,24 @@ func (df DataFrame) SetValue(dfl DataFrameLookup, val float64) DataError {
 	cIdx := df.GetColHeadingIndex(dfl.GetColLookup())
 	rIdx := df.GetRowLabelIndex(dfl.GetRowLookup())
 	return df.Matrix.SetPosValue(cIdx, rIdx, val)
+}
+
+func (df *DataFrame) AddColWithHeading(heading fmt.Stringer) DataError {
+	colHds := df.ColHeadings
+
+	df.ColHeadings = append(colHds, heading)
+	if !df.ValidateColHeaders() {
+		df.ColHeadings = colHds
+		return DataFrameDuplicateHeading
+	}
+	df.AddRow(1)
+	return nil
+}
+
+func (df *DataFrame) AddColWithHeadingVals(heading fmt.Stringer, vals []float64) DataError {
+	err := df.AddColWithHeading(heading)
+	if err != nil {
+		return err
+	}
+	return df.SetRow(df.RowCount()-1, vals)
 }

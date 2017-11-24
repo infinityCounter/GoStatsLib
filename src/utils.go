@@ -26,6 +26,6 @@ func check(e error) {
 }
 
 func StringToFloat64(str string) float64 {
-	fl, err := strconv.ParseFloat(str, 64)
+	fl, _ := strconv.ParseFloat(str, 64)
 	return fl
 }
