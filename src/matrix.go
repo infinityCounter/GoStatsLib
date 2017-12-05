@@ -137,10 +137,10 @@ func (mtrx *Matrix) DivideAllByFloat64(val float64) {
 }
 
 func (mtrx *Matrix) NormalizeMatrix() {
-	for _, col := range mtrx.Data {
+	for cIdx, col := range mtrx.Data {
 		firstVal := col[0]
-		for _, cell := range col {
-			cell = cell / firstVal
+		for rIdx, cell := range col {
+			mtrx.Data[cIdx][rIdx] = cell / firstVal
 		}
 	}
 }

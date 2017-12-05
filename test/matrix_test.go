@@ -1,6 +1,7 @@
 package test
 
 import (
+	"fmt"
 	"math/rand"
 	"testing"
 	"time"
@@ -177,6 +178,7 @@ func TestGetCol(t *testing.T) {
 		{1.1, 2.4},
 		{9.1, 0},
 	}
+	ans := vals[0]
 	mtrx := src.NewMatrix(colSize, rowSize)
 	for ccount := 0; ccount < colSize; ccount++ {
 		for rcount := 0; rcount < rowSize; rcount++ {
@@ -187,13 +189,101 @@ func TestGetCol(t *testing.T) {
 	if err != nil {
 		t.Errorf("Matrix did not return column")
 	}
-	if len(col) != len(vals[0]) {
-		t.Errorf("Matrix column returned does not match, expected:%v, actual:%v", vals[0], col)
+	if len(col) != len(ans) {
+		t.Errorf("Matrix column returned does not match, expected:%v, actual:%v", ans, col)
+	} else {
+		for idx, val := range ans {
+			if val != col[idx] {
+				t.Errorf("Matrix column returned does not match, expected:%v, actual:%v", ans, col)
+				break
+			}
+		}
 	}
-	for idx, val := range vals[0] {
-		if val != col[idx] {
-			t.Errorf("Matrix column returned does not match, expected:%v, actual:%v", vals[0], col)
-			break
+}
+
+func TestGetRow(t *testing.T) {
+	colSize := 4
+	rowSize := 2
+	vals := [][]float64{
+		{5, 6},
+		{9.1, 3.3},
+		{1.1, 2.4},
+		{9.1, 0},
+	}
+	ans := []float64{5, 9.1, 1.1, 9.1}
+	mtrx := src.NewMatrix(colSize, rowSize)
+	for ccount := 0; ccount < colSize; ccount++ {
+		for rcount := 0; rcount < rowSize; rcount++ {
+			mtrx.SetPosValue(ccount, rcount, vals[ccount][rcount])
+		}
+	}
+	row, err := mtrx.GetRow(0)
+	for _, x := range row {
+		fmt.Printf("%f ", x)
+	}
+	if err != nil {
+		t.Errorf("Matrix did not return row")
+	}
+	if len(row) != len(ans) {
+		t.Errorf("Matrix row returned does not match, expected:%v, actual:%v", ans, row)
+	} else {
+		for idx, val := range ans {
+			if val != row[idx] {
+				t.Errorf("Matrix row returned does not match, expected:%v, actual:%v", ans, row)
+				break
+			}
+		}
+	}
+}
+
+func TestSetRow(t *testing.T) {
+	colSize := 4
+	rowSize := 2
+	vals := [][]float64{
+		{5, 6},
+		{9.1, 3.3},
+		{1.1, 2.4},
+		{9.1, 0},
+	}
+	long := []float64{1, 4, 3, 8, 9}
+	short := []float64{863.1}
+	mtrx := src.NewMatrix(colSize, rowSize)
+	for ccount := 0; ccount < colSize; ccount++ {
+		for rcount := 0; rcount < rowSize; rcount++ {
+			mtrx.SetPosValue(ccount, rcount, vals[ccount][rcount])
+		}
+	}
+	err := mtrx.SetRow(0, long)
+	if err != nil {
+		t.Errorf("Error setting row; err=%s", err.Error())
+		t.FailNow()
+	}
+	row, err := mtrx.GetRow(0)
+	if err != nil {
+		t.Errorf("Matrix did not return row")
+	}
+	if len(row) != colSize {
+		t.Errorf("Matrix row returned does not match, expected:%v, actual:%v", long[:colSize], row)
+	} else {
+		for idx, val := range long[:colSize] {
+			if val != row[idx] {
+				t.Errorf("Matrix row returned does not match, expected:%v, actual:%v", long[:colSize], row)
+				break
+			}
+		}
+	}
+
+	mtrx.SetRow(1, short)
+	row, err = mtrx.GetRow(1)
+	expec := []float64{863.1, 0, 0, 0}
+	if len(row) != colSize {
+		t.Errorf("Matrix row returned does not match, expected:%v, actual:%v", expec, row)
+	} else {
+		for idx, val := range expec {
+			if val != row[idx] {
+				t.Errorf("Matrix row returned does not match, expected:%v, actual:%v", expec, row)
+				break
+			}
 		}
 	}
 }
